@@ -87,7 +87,11 @@ void FileHelper::writeFile(const QStringList lines, const QString &filePath)
         stream.setCodec("UTF-8");
 #endif
         for (const auto &line : lines) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+            stream << line << Qt::endl;
+#else
             stream << line << endl;
+#endif
         }
         file.close();
         return;

@@ -25,7 +25,11 @@ void ManDB::saveLoginInfo(const QString &name, const QString &id, const QString 
     info.secret_id = id.trimmed();
     info.secret_key = key.trimmed();
     info.remark = remark.trimmed();
-    info.timestamp = QDateTime::currentDateTimeUtc().toTime_t();        // 时间戳
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    info.timestamp = QDateTime::currentDateTimeUtc().toSecsSinceEpoch();  // 时间戳
+#else
+    info.timestamp = QDateTime::currentDateTimeUtc().toTime_t();          // 时间戳
+#endif
 
     // 存在则更新，不存在则插入
     // 这里需要捕获db操作可能出现的异常
