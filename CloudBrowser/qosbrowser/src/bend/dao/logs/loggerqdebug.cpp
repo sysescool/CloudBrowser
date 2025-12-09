@@ -81,7 +81,7 @@ void LoggerQDebug::handle(QtMsgType type, const QMessageLogContext &context, con
     if(file.open(QIODevice::WriteOnly|QIODevice::Append))
     {
         QTextStream stream(&file);
-        stream << message << endl;
+        stream << message << Qt::endl;
         file.close();
     }
 

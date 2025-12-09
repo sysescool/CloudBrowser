@@ -6,7 +6,8 @@ THIRD_DIR = $$PWD/../
 
 include(qosbrowser.pri)
 
-RC_FILE = $$PWD/static/img/res.rc
+# RC_FILE = $$PWD/static/img/res.rc
+RC_FILE = $$PWD/static/img/Resource.rc
 
 SOURCES += \
     main.cpp
