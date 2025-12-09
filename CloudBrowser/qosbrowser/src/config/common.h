@@ -16,6 +16,13 @@
 
 #include "src/helper/filehelper.h"
 #include "src/helper/bytehelper.h"
-#define STR QString::fromLocal8Bit
+
+// Qt6 默认使用 UTF-8，直接用字符串字面量即可
+// Qt5 需要显式转换为 UTF-8
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    #define STR(x) QString(x)
+#else
+    #define STR(x) QString::fromUtf8(x)
+#endif
 
 #endif // COMMON_H

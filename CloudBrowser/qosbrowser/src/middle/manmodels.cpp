@@ -45,7 +45,7 @@ void ManModels::setBuckets(const QList<MyBucket>& buckets)
         QModelIndex index0 = m_modelBuckets->index(i,0);
         m_modelBuckets->setData(index0, bucket.name);
         // 可以使鼠标放到该数据上显示提示信息
-        m_modelBuckets->setData(index0, QString::fromLocal8Bit("存储桶名称： %1").arg(bucket.name),
+        m_modelBuckets->setData(index0, QString::fromUtf8("存储桶名称： %1").arg(bucket.name),
                                 Qt::ToolTipRole);
         // 设置图标
         m_modelBuckets->setData(index0, QIcon(GLOBAL::PATH::BUCKET), Qt::DecorationRole);
@@ -105,9 +105,9 @@ void ManModels::setObjects(const QList<MyObject> &objects)
 void ManModels::initBucketsTable()
 {
     QStringList labels;
-    labels << QString::fromLocal8Bit("桶名称")
-           << QString::fromLocal8Bit("地区")
-           << QString::fromLocal8Bit("创建时间");
+    labels << QString::fromUtf8("桶名称")
+           << QString::fromUtf8("地区")
+           << QString::fromUtf8("创建时间");
 
     m_modelBuckets->setColumnCount(labels.size());
     m_modelBuckets->setHorizontalHeaderLabels(labels);
@@ -117,8 +117,8 @@ void ManModels::initObjectsTable()
 {
     // 设置标题内容
     QStringList labels;
-    labels << QString::fromLocal8Bit("对象名称") << QString::fromLocal8Bit("大小")
-           << QString::fromLocal8Bit("更新时间");
+    labels << QString::fromUtf8("对象名称") << QString::fromUtf8("大小")
+           << QString::fromUtf8("更新时间");
     m_modelObjects->setColumnCount(labels.size());
     m_modelObjects->setHorizontalHeaderLabels(labels);
 }

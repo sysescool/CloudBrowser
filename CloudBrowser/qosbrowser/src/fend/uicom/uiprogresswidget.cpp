@@ -39,7 +39,7 @@ void UiProgressWidget::setValue(qulonglong value)
     if (speed > 0 && leftValue > 0)
     {
         int time = leftValue/speed;     // 预计剩余下载时间
-        ui->labelTime->setText(QString::fromLocal8Bit("剩余%1s").arg(time));
+        ui->labelTime->setText(QString::fromUtf8("剩余%1s").arg(time));
     }
     else
     {

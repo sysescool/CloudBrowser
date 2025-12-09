@@ -31,7 +31,7 @@ public:
      */
     QString showMessage(const QString& title,
                         const QString& text,
-                        const QStringList &btnTextList = QStringList(QString::fromLocal8Bit("确定")),
+                        const QStringList &btnTextList = QStringList(QString::fromUtf8("确定")),
                         const int weight = 400,
                         const int height = 50);
 

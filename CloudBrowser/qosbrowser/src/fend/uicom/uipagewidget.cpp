@@ -70,7 +70,7 @@ int UiPageWidget::isLastPage() const
 void UiPageWidget::setTotalRow(int newTotalRow)
 {
     m_totalRow = newTotalRow;
-    ui->label->setText(QString::fromLocal8Bit("共%1条，每页").arg(newTotalRow));
+    ui->label->setText(QString::fromUtf8("共%1条，每页").arg(newTotalRow));
     reset();
 }
 
