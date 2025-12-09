@@ -2,13 +2,24 @@
 #include"cos_api.h"
 #include"src/config/common.h"
 #include<QDebug>
+#include<QFile>
+#include<QCoreApplication>
 #include<string>
 using namespace qcloud_cos;
 
 DaoCloudsCos::DaoCloudsCos()
 {
-    // 这里需要放到执行文件(.exe)所在目录的上一个目录
-    m_config = new CosConfig("./cosconfig.json");
+    // 配置文件路径（在可执行文件目录）
+    QString configPath = FileHelper::joinPath(QCoreApplication::applicationDirPath(), "cosconfig.json");
+    
+    // 如果配置文件不存在，从资源文件中复制
+    if (!QFile::exists(configPath)) {
+        QFile::copy(":/static/configs/cosconfig.json", configPath);
+        // 设置为可写（资源文件复制出来默认是只读）
+        QFile::setPermissions(configPath, QFile::ReadOwner | QFile::WriteOwner);
+    }
+    
+    m_config = new CosConfig(configPath.toStdString().c_str());
     mWarning("The program uses Tencent cloud object storage.");
 }
 
@@ -89,7 +100,7 @@ void DaoCloudsCos::putBucket(const QString &bucketName, const QString &location)
         return;
     }
 
-    PutBucketReq req(bucketName.toLocal8Bit().data());
+    PutBucketReq req(bucketName.toUtf8().data());
     PutBucketResp resp;
 
     m_config->SetRegion(location.toStdString());    // 重新设置地区
