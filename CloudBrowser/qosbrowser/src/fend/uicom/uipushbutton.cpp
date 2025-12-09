@@ -5,7 +5,7 @@ UiPushButton::UiPushButton(QWidget* parent): QPushButton(parent)
 
 }
 
-void UiPushButton::enterEvent(QEvent *event)
+void UiPushButton::enterEvent(UiEnterEvent *event)
 {
     Q_UNUSED(event);
     setCursor(Qt::PointingHandCursor);      // 把鼠标放到这里，会显示小手
