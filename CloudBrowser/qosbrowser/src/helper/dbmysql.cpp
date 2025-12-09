@@ -1,10 +1,12 @@
 ﻿#include "dbmysql.h"
 #include "src/config/globals.h"
+#include "filehelper.h"
 #include <QSqlRecord>
 
 DbMySql::DbMySql()
 {
-    m_db = QSqlDatabase::addDatabase("QMYSQL");
+    // 使用 SQLite 替代 MySQL（Qt 内置支持，无需额外驱动）
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
 }
 
 DbMySql::~DbMySql()
@@ -17,14 +19,14 @@ DbMySql::~DbMySql()
 
 void DbMySql::connect(const QString &dbname)
 {
-    m_db.setHostName(GLOBAL::NET::HOST);
-    m_db.setUserName(GLOBAL::USER::DEVNAME);
-    m_db.setPassword(GLOBAL::USER::PASSWORD);
-    m_db.setDatabaseName(dbname);           // 设置打开的数据库
+    // SQLite 使用本地文件，不需要主机名、用户名、密码
+    // 数据库文件保存在临时目录
+    QString dbPath = FileHelper::joinPath(GLOBAL::PATH::TMP, dbname + ".db");
+    m_db.setDatabaseName(dbPath);
 
     if(!m_db.open())
     {
-        throw QString::fromLocal8Bit("打开数据库失败: %1 %2").arg(dbname, m_db.lastError().text());
+        throw QString::fromUtf8("打开数据库失败: %1 %2").arg(dbPath, m_db.lastError().text());
     }
 }
 
@@ -41,7 +43,7 @@ QSqlQuery DbMySql::exec(const QString &sql)
     QSqlQuery query;
     if(!query.exec(sql))
     {
-        throw QString::fromLocal8Bit("执行sql失败：%1 %2").arg(sql,m_db.lastError().text());
+        throw QString::fromUtf8("执行sql失败：%1 %2").arg(sql,m_db.lastError().text());
     }
     return query;
 }
@@ -54,7 +56,7 @@ QSqlQuery DbMySql::exec(const QString &sql, QVariantList &variantList)
     // 判断sql有没有准备好，是否是可绑定后执行的语句
     if(!query.prepare(sql))
     {
-        throw QString::fromLocal8Bit("预编译sql失败：%1 %2").arg(sql,m_db.lastError().text());
+        throw QString::fromUtf8("预编译sql失败：%1 %2").arg(sql,m_db.lastError().text());
     }
 
     // 绑定参数
@@ -65,7 +67,7 @@ QSqlQuery DbMySql::exec(const QString &sql, QVariantList &variantList)
 
     if(!query.exec())
     {
-        throw QString::fromLocal8Bit("执行sql bindvalue失败：%1 %2").arg(sql,m_db.lastError().text());
+        throw QString::fromUtf8("执行sql bindvalue失败：%1 %2").arg(sql,m_db.lastError().text());
     }
 
     return query;

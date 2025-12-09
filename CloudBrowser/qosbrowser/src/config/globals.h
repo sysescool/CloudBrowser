@@ -26,7 +26,7 @@ namespace GLOBAL {
     // 如果表不存在则创建
     namespace SQL {
     static const QString LOGIN_INFO_CREATE =
-        ":/static/sql/login_info.sql";
+        ":/static/sql/login_info_sqlite.sql";  // 使用 SQLite 版本
     };
 
     // 版本号模拟
