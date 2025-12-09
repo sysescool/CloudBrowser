@@ -3,7 +3,9 @@
 #include <Exception>
 #include <QApplication>
 #include <QMessageBox>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QTextCodec>
+#endif
 #include "src/fend/uilogin/uilogindialog.h"
 #include "src/middle/manglobal.h"
 #include <src/fend/uicom/uimessagebox.h>
@@ -15,7 +17,10 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     // 设置编码
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+#endif
+    // Qt6 默认使用 UTF-8，无需额外设置
 
     // 安装插件
     try{

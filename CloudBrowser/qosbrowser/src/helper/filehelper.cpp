@@ -1,7 +1,13 @@
 ﻿#include "filehelper.h"
 #include <QDir>
 #include <QIODevice>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QRegularExpression>
+#include <QStringConverter>
+#else
 #include <QRegExp>
+#include <QTextCodec>
+#endif
 #include <iostream>
 
 FileHelper::FileHelper() {}
@@ -48,10 +54,14 @@ QString FileHelper::joinPath(const QString &path1, const QString &path2)
      * eg: "folder1/folder2\\folder3/folder4"
      * out: ["folder1", "folder2", "folder3", "folder4"]
      */
-    QStringList pathList =
-        path.split(QRegExp("[/\\\\]"), QString::SkipEmptyParts);
+    QStringList pathList;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    pathList = path.split(QRegularExpression("[/\\\\]"), Qt::SkipEmptyParts);
+#else
+    pathList = path.split(QRegExp("[/\\\\]"), QString::SkipEmptyParts);
+#endif
 
-    path = pathList.join("/"); // 将list中的字符串通过‘/’拼接成一个
+    path = pathList.join("/"); // 将list中的字符串通过'/'拼接成一个
 
     // 压缩路径 "./local" ->"local"
     // "local/../bin" -> "bin"
@@ -71,7 +81,11 @@ void FileHelper::writeFile(const QStringList lines, const QString &filePath)
     QFile file(filePath);
     if (file.open(QIODevice::Append | QIODevice::Text)) {
         QTextStream stream(&file);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        stream.setEncoding(QStringConverter::Utf8);
+#else
         stream.setCodec("UTF-8");
+#endif
         for (const auto &line : lines) {
             stream << line << endl;
         }
